@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d2d44">
+  <meta name="description" content="Organizá tu biblioteca física. Escaneá ISBN, prestá a amigos, no perdás nunca más un libro.">
+
+  <title>perdimilibro · tu biblioteca, ordenada</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Karla:wght@300..700&display=swap" rel="stylesheet">
+
+  <!-- Scanner -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="brand">
+        <h1>perdimilibro</h1>
+        <div class="tagline">tu biblioteca, ordenada de verdad</div>
+      </div>
+      <div class="household-switcher" id="householdSwitcher">
+        <span>Hogar:</span>
+        <select id="householdSelect"></select>
+        <button class="btn small ghost" id="manageHouseholdBtn" title="Gestionar hogares">⚙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================
+       TOOLBAR
+       ========================= -->
+  <nav class="toolbar">
+    <div class="toolbar-inner">
+      <button class="btn primary" id="scanBtn">
+        <span>📷</span> Escanear ISBN
+      </button>
+      <button class="btn" id="addManualBtn">＋ Agregar manual</button>
+
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Buscar título, autor, palabra…" autocomplete="off">
+      </div>
+
+      <select class="filter" id="filterLocation">
+        <option value="">Todas las ubicaciones</option>
+      </select>
+
+      <select class="filter" id="filterStatus">
+        <option value="">Todos los estados</option>
+        <option value="home">En casa</option>
+        <option value="lent">Prestados</option>
+        <option value="reading">Leyendo</option>
+        <option value="wishlist">Lista de deseos</option>
+        <option value="lost">Perdidos</option>
+      </select>
+
+      <select class="filter" id="filterOwner">
+        <option value="">Todos los dueños</option>
+      </select>
+
+      <div class="view-toggle" id="viewToggle">
+        <button class="active" data-view="list">Lista</button>
+        <button data-view="gallery">Galería</button>
+        <button data-view="location">Por ubicación</button>
+        <button data-view="loans">Préstamos</button>
+      </div>
+
+      <button class="btn ghost small" id="locationsBtn" title="Gestionar ubicaciones">📍 Ubicaciones</button>
+      <button class="btn ghost small" id="exportBtn" title="Exportar datos">⤓</button>
+      <button class="btn ghost small" id="importBtn" title="Importar datos">⤒</button>
+    </div>
+  </nav>
+
+  <!-- =========================
+       STATS
+       ========================= -->
+  <div class="stats">
+    <div class="stat"><strong id="statTotal">0</strong> libros totales</div>
+    <div class="stat"><strong id="statShowing">0</strong> mostrando</div>
+    <div class="stat"><strong id="statLent">0</strong> prestados</div>
+    <div class="stat"><strong id="statLocations">0</strong> ubicaciones</div>
+  </div>
+
+  <!-- =========================
+       MAIN
+       ========================= -->
+  <main id="mainCanvas">
+    <!-- Vista vacía -->
+    <section id="emptyState" class="empty-state">
+      <svg class="shelves" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="shelfGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#e8d8b3"/>
+            <stop offset="100%" stop-color="#d4c094"/>
+          </linearGradient>
+        </defs>
+        <!-- Estantes -->
+        <rect x="0" y="120" width="1200" height="6" fill="url(#shelfGrad)"/>
+        <rect x="0" y="280" width="1200" height="6" fill="url(#shelfGrad)"/>
+        <rect x="0" y="440" width="1200" height="6" fill="url(#shelfGrad)"/>
+        <!-- Libros estante 1 -->
+        <g id="row1"></g>
+        <g id="row2"></g>
+        <g id="row3"></g>
+      </svg>
+
+      <div class="message">
+        <h2>Una biblioteca empieza con un libro</h2>
+        <p>Escaneá el código de barras de cualquier libro de tu casa para empezar. O agregá uno manualmente si no tiene ISBN.</p>
+        <div class="empty-actions">
+          <button class="btn primary" onclick="document.getElementById('scanBtn').click()">📷 Escanear primer libro</button>
+          <button class="btn" onclick="document.getElementById('addManualBtn').click()">＋ Agregar manual</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vistas dinámicas -->
+    <div id="viewList" class="hidden"></div>
+    <div id="viewGallery" class="hidden"></div>
+    <div id="viewLocation" class="hidden"></div>
+    <div id="viewLoans" class="hidden"></div>
+  </main>
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+  <footer class="app-footer">
+    <div>
+      <a href="terminos.html">Términos y Condiciones</a>
+      <a href="privacidad.html">Política de Privacidad</a>
+      <a href="#" id="aboutLink">Acerca de</a>
+    </div>
+    <div class="signature">
+      perdimilibro · v0.1 (MVP) · hecho en Buenos Aires
+    </div>
+  </footer>
+
+  <!-- =========================
+       MODAL CONTAINER
+       ========================= -->
+  <div id="modalRoot"></div>
+
+  <!-- =========================
+       TOAST CONTAINER
+       ========================= -->
+  <div id="toastRoot"></div>
+
+  <!-- =========================
+       INPUT OCULTO PARA IMPORT
+       ========================= -->
+  <input type="file" id="importFile" accept="application/json" class="hidden">
+
+  <!-- Service worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+      });
+    }
+  </script>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

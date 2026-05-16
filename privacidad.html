@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de Privacidad · perdimilibro</title>
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Karla:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="brand">
+        <h1><a href="index.html" style="color:inherit; text-decoration:none;">perdimilibro</a></h1>
+        <div class="tagline">tu biblioteca, ordenada de verdad</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="legal-page">
+    <h1>Política de Privacidad</h1>
+    <p class="meta">Última actualización: 16 de mayo de 2026 · Versión 1.0</p>
+
+    <p>
+      Esta Política de Privacidad describe cómo <strong>perdimilibro</strong> (la "Aplicación")
+      recolecta, utiliza, almacena y protege los datos personales de sus usuarios, conforme a la
+      <strong>Ley N° 25.326 de Protección de los Datos Personales</strong> de la República
+      Argentina, su Decreto Reglamentario 1558/2001 y normativa concordante.
+    </p>
+
+    <h2>1. Responsable de los datos</h2>
+    <p>
+      El responsable del tratamiento es una persona física residente en la Ciudad Autónoma de Buenos
+      Aires, en carácter individual y sin fines de lucro durante la etapa MVP. Contacto:
+      <a href="mailto:hola@perdimilibro.com">hola@perdimilibro.com</a>.
+    </p>
+
+    <h2>2. Qué datos recolectamos</h2>
+
+    <h3>2.1. Datos almacenados localmente en su dispositivo</h3>
+    <p>
+      En la versión actual de la Aplicación, la mayor parte de la información se almacena
+      <strong>únicamente en el navegador del Usuario</strong> mediante la tecnología
+      <em>IndexedDB</em>. Esto incluye:
+    </p>
+    <ul>
+      <li>Datos de los libros cargados (título, autor, editorial, ISBN, año, notas, etc.).</li>
+      <li>Ubicaciones físicas creadas (estanterías, balda, posición).</li>
+      <li>Nombres y datos de contacto de personas a las que el Usuario haya prestado libros, si
+          decide cargarlos.</li>
+      <li>Nombres de miembros del hogar.</li>
+      <li>Preferencias de uso y configuración.</li>
+    </ul>
+    <p>
+      Estos datos <strong>no se envían a ningún servidor de perdimilibro</strong> en la versión
+      actual y permanecen accesibles únicamente desde el dispositivo donde fueron cargados.
+    </p>
+
+    <h3>2.2. Datos enviados a terceros para enriquecer información de libros</h3>
+    <p>
+      Cuando el Usuario escanea o ingresa un ISBN, la Aplicación realiza una consulta a APIs
+      públicas para obtener metadatos del libro (título, portada, etc.). Las consultas se envían a:
+    </p>
+    <ul>
+      <li><strong>Google Books API</strong> (Google LLC, Estados Unidos) —
+          <a href="https://policies.google.com/privacy">Política de privacidad de Google</a>.</li>
+      <li><strong>Open Library API</strong> (Internet Archive, organización sin fines de lucro) —
+          <a href="https://archive.org/about/terms">Términos de Internet Archive</a>.</li>
+    </ul>
+    <p>
+      La única información enviada es el <strong>código ISBN consultado</strong>. No se envían
+      datos personales del Usuario.
+    </p>
+
+    <h3>2.3. Datos técnicos</h3>
+    <p>
+      El proveedor de hosting (Vercel Inc.) puede registrar datos técnicos básicos como dirección IP,
+      tipo de navegador y fecha y hora de acceso, conforme a sus propias políticas, con fines de
+      seguridad y desempeño. Estos registros son anónimos en relación con la cuenta del Usuario.
+    </p>
+
+    <h3>2.4. Datos a futuro (no implementado aún)</h3>
+    <p>
+      Cuando se habilite el registro de cuentas y sincronización en la nube, podrán recolectarse
+      datos adicionales tales como dirección de correo electrónico, fecha de registro y registros
+      básicos de actividad. Antes de habilitar esa funcionalidad, esta Política será actualizada y
+      se notificará a los usuarios.
+    </p>
+
+    <h2>3. Para qué usamos los datos</h2>
+    <ul>
+      <li>Brindar y mantener la funcionalidad de la Aplicación.</li>
+      <li>Permitir al Usuario organizar su biblioteca personal.</li>
+      <li>Realizar copias de seguridad cuando el Usuario lo solicite explícitamente (función
+          "Exportar datos").</li>
+      <li>Mejorar la Aplicación a partir de feedback recibido.</li>
+    </ul>
+    <p>
+      <strong>No vendemos, alquilamos ni cedemos datos personales a terceros con fines
+      publicitarios.</strong>
+    </p>
+
+    <h2>4. Cookies y tecnologías similares</h2>
+    <p>
+      La Aplicación utiliza exclusivamente <strong>almacenamiento técnico necesario</strong> en el
+      navegador (IndexedDB, almacenamiento del Service Worker para funcionamiento offline) y
+      <strong>no utiliza cookies de seguimiento, publicidad ni análisis</strong> en la versión
+      actual.
+    </p>
+
+    <h2>5. Permisos del dispositivo</h2>
+    <h3>5.1. Cámara</h3>
+    <p>
+      La Aplicación solicita acceso a la cámara únicamente cuando el Usuario activa la función de
+      escaneo de códigos de barras. Las imágenes <strong>no son almacenadas ni transmitidas</strong>
+      a ningún lugar; se procesan en tiempo real dentro del navegador del Usuario para decodificar
+      el ISBN, y el video se descarta inmediatamente.
+    </p>
+
+    <h2>6. Plazo de conservación</h2>
+    <p>
+      Los datos almacenados localmente permanecen en el dispositivo del Usuario hasta que éste:
+    </p>
+    <ul>
+      <li>Los elimine manualmente desde la Aplicación.</li>
+      <li>Borre los datos del navegador o desinstale la Aplicación.</li>
+    </ul>
+    <p>
+      El Usuario es el único que controla la conservación de sus datos en esta versión MVP.
+    </p>
+
+    <h2>7. Derechos del Usuario (Ley 25.326)</h2>
+    <p>
+      De conformidad con los artículos 13, 14, 15 y 16 de la Ley 25.326, el Usuario tiene derecho
+      a, respecto de los datos que se encuentren bajo nuestro control:
+    </p>
+    <ul>
+      <li><strong>Acceso:</strong> conocer qué datos personales se han recolectado.</li>
+      <li><strong>Rectificación:</strong> corregir datos inexactos o incompletos.</li>
+      <li><strong>Actualización:</strong> mantener los datos al día.</li>
+      <li><strong>Supresión:</strong> solicitar la eliminación de sus datos.</li>
+      <li><strong>Oposición:</strong> oponerse al tratamiento de sus datos.</li>
+    </ul>
+    <p>
+      En la versión actual, dado que los datos están almacenados localmente, el Usuario puede
+      ejercer estos derechos directamente desde la Aplicación (editando, eliminando o exportando
+      sus datos). Para cualquier consulta adicional, escribir a
+      <a href="mailto:hola@perdimilibro.com">hola@perdimilibro.com</a>.
+    </p>
+
+    <p>
+      La Agencia de Acceso a la Información Pública (Av. Pte. Gral. Julio A. Roca 710, piso 2, CABA),
+      en su carácter de Órgano de Control de la Ley N° 25.326, tiene la atribución de atender las
+      denuncias y reclamos que se interpongan con relación al incumplimiento de las normas sobre
+      protección de datos personales. Más información:
+      <a href="https://www.argentina.gob.ar/aaip">argentina.gob.ar/aaip</a>.
+    </p>
+
+    <h2>8. Seguridad</h2>
+    <p>
+      Implementamos medidas razonables para proteger los datos del Usuario, incluyendo conexión
+      HTTPS obligatoria y almacenamiento aislado del navegador. No obstante, ningún sistema es
+      completamente seguro y el Usuario debe tomar precauciones razonables (no compartir su
+      dispositivo, mantener su navegador actualizado).
+    </p>
+
+    <h2>9. Menores de edad</h2>
+    <p>
+      La Aplicación no está dirigida específicamente a menores de 16 años. Si un menor desea
+      utilizar la Aplicación, debe contar con autorización y supervisión de su madre, padre o tutor
+      legal.
+    </p>
+
+    <h2>10. Transferencia internacional de datos</h2>
+    <p>
+      Las consultas a APIs de terceros (Google Books, Open Library) pueden implicar transferencia
+      del código ISBN consultado a servidores fuera de la República Argentina. La Aplicación está
+      alojada en infraestructura de Vercel Inc. (Estados Unidos), país que cuenta con marco
+      regulatorio aplicable. Cuando se habilite almacenamiento en la nube, se utilizará Supabase
+      (proveedor con servidores en regiones a definir), informando oportunamente al Usuario.
+    </p>
+
+    <h2>11. Modificaciones</h2>
+    <p>
+      Esta Política puede ser modificada para reflejar cambios en la Aplicación o en la legislación.
+      Cambios sustanciales se notificarán dentro de la Aplicación o por correo electrónico cuando
+      sea aplicable.
+    </p>
+
+    <h2>12. Contacto</h2>
+    <p>
+      Para ejercer derechos sobre datos personales o realizar consultas sobre esta política:
+      <a href="mailto:hola@perdimilibro.com">hola@perdimilibro.com</a>.
+    </p>
+
+    <hr class="divider">
+    <p style="font-size: 0.85rem; color: var(--ink-soft); font-style: italic;">
+      Este documento es una versión inicial preparada para etapa MVP. Antes de ampliar el servicio a
+      mayor escala o procesar datos sensibles, se recomienda inscripción de la base de datos ante
+      la Dirección Nacional de Protección de Datos Personales y revisión por asesoría legal.
+    </p>
+
+    <p><a href="index.html">← Volver a la aplicación</a></p>
+  </main>
+
+  <footer class="app-footer">
+    <div>
+      <a href="terminos.html">Términos y Condiciones</a>
+      <a href="privacidad.html">Política de Privacidad</a>
+    </div>
+    <div class="signature">perdimilibro · v0.1 (MVP) · hecho en Buenos Aires</div>
+  </footer>
+</body>
+</html>

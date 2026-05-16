@@ -1,0 +1,31 @@
+{
+  "name": "perdimilibro",
+  "short_name": "perdimilibro",
+  "description": "Tu biblioteca física, ordenada. Escaneá ISBN, prestá a amigos, no perdás nunca más un libro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6ecd9",
+  "theme_color": "#1d2d44",
+  "orientation": "portrait",
+  "lang": "es-AR",
+  "categories": ["books", "productivity", "lifestyle"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
