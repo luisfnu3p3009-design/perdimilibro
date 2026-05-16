@@ -234,6 +234,190 @@ async function fetchIsbnMetadata(isbn) {
 }
 
 // ============================================================
+// Scan visual del lomo (Claude multimodal vía /api/scan-libro)
+// ============================================================
+
+// Mapeo de idioma (lo que devuelve el modelo → código ISO que usa el schema interno)
+const IDIOMA_MAP = {
+  'espanol': 'es', 'español': 'es',
+  'ingles': 'en', 'inglés': 'en', 'english': 'en',
+  'frances': 'fr', 'francés': 'fr',
+  'italiano': 'it',
+  'portugues': 'pt', 'português': 'pt',
+  'aleman': 'de', 'alemán': 'de',
+  'catalan': 'ca', 'catalán': 'ca',
+  'gallego': 'gl',
+  'latin': 'la', 'latín': 'la'
+};
+
+function normalizarIdioma(s) {
+  if (!s) return 'es';
+  const k = String(s).toLowerCase().trim();
+  return IDIOMA_MAP[k] || s; // si no lo conoce, lo deja como vino
+}
+
+/**
+ * Convierte el JSON que devuelve Claude (en español, singular) al schema
+ * interno de perdimilibro (en inglés, con authors[] como array).
+ */
+function mapearScanALibro(scan) {
+  // Construir authors[]: el modelo devuelve un string que puede tener varios
+  // separados por " ; ". Cortamos.
+  const autorStr = (scan.autor || '').trim();
+  const authors = autorStr
+    ? autorStr.split(/\s*;\s*/).map(s => s.trim()).filter(Boolean)
+    : [];
+
+  // Construir notes con campos que el schema interno no tiene como columnas:
+  // subtítulo, edición, tomo, y la nota del modelo (si hay varios libros).
+  const notasExtras = [];
+  if (scan.subtitulo) notasExtras.push(`Subtítulo: ${scan.subtitulo}`);
+  if (scan.edicion)   notasExtras.push(`Edición: ${scan.edicion}`);
+  if (scan.tomo)      notasExtras.push(`Tomo: ${scan.tomo}`);
+  if (scan.nota)      notasExtras.push(scan.nota);
+
+  return {
+    title: scan.titulo || '',
+    authors,
+    publisher: scan.editorial || '',
+    published_year: scan.anio ? parseInt(String(scan.anio).slice(0, 4)) : null,
+    isbn: scan.isbn || null,
+    language: normalizarIdioma(scan.idioma),
+    notes: notasExtras.join(' · '),
+    cover_url: null // el scan no genera portada; el placeholder muestra el título
+  };
+}
+
+/**
+ * Reduce la imagen antes de mandarla. Una foto típica de iPhone son 12 MP y
+ * ~3 MB; redimensionada a 1600 px de lado mayor queda en ~300-500 KB. Eso:
+ *   1) baja el costo de la API (Sonnet 4.6 soporta hasta 3.0 MP, así que
+ *      mandar 12 MP no agrega precisión, sólo costo y latencia).
+ *   2) deja la request bien por debajo del timeout de Vercel (10 seg).
+ */
+function reducirImagen(file, maxLado = 1600, calidad = 0.85) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const ratio = Math.min(maxLado / img.width, maxLado / img.height, 1);
+      const w = Math.round(img.width * ratio);
+      const h = Math.round(img.height * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(
+        b => b ? resolve(b) : reject(new Error('Falló el resize de la imagen')),
+        'image/jpeg',
+        calidad
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo leer la imagen')); };
+    img.src = url;
+  });
+}
+
+function blobABase64(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]); // saca el prefijo data:...;base64,
+    r.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    r.readAsDataURL(blob);
+  });
+}
+
+/**
+ * Llama al backend con la imagen y devuelve el JSON con los datos del libro
+ * ya mapeados al schema interno. Si la imagen no es un libro o falla, tira.
+ */
+async function scanLibroDesdeFoto(file) {
+  const blob = await reducirImagen(file, 1600, 0.85);
+  const base64 = await blobABase64(blob);
+
+  const resp = await fetch('/api/scan-libro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imagen_base64: base64, media_type: 'image/jpeg' })
+  });
+
+  let data;
+  try { data = await resp.json(); }
+  catch { throw new Error(`Respuesta inválida del servidor (HTTP ${resp.status})`); }
+
+  if (!resp.ok) {
+    throw new Error(data.error || `Error HTTP ${resp.status}`);
+  }
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
+  return mapearScanALibro(data);
+}
+
+/**
+ * Botón "📷 Escanear lomo" → abre el picker de cámara del celular.
+ */
+function openPhotoScanner() {
+  const input = document.getElementById('photoFileInput');
+  input.value = ''; // resetear por si quedó algo del anterior
+  input.click();
+}
+
+/**
+ * Cuando el usuario saca la foto, este handler hace el flujo completo:
+ * reduce → manda al backend → mapea → abre el formulario pre-rellenado.
+ */
+async function handlePhotoCapture(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // Modal "procesando" para que el usuario vea que algo pasa.
+  modal({
+    title: 'Analizando la foto',
+    body: `
+      <div style="text-align:center; padding:1.5rem 0;">
+        <div class="serif italic" style="font-size:1.1rem; color:var(--navy); margin-bottom:1rem;">
+          Claude está leyendo el lomo...
+        </div>
+        <div class="text-muted" style="font-size:0.9rem;">
+          Esto tarda entre 5 y 10 segundos.
+        </div>
+        <div id="scanProgress" style="margin-top:1.5rem; font-size:0.85rem; color:var(--ink-soft);">
+          Reduciendo imagen...
+        </div>
+      </div>
+    `,
+    footer: ''
+  });
+
+  try {
+    const progress = document.getElementById('scanProgress');
+    if (progress) progress.textContent = 'Enviando a Claude...';
+
+    const libroData = await scanLibroDesdeFoto(file);
+
+    closeModal();
+
+    // Si el modelo no pudo leer NADA útil, mostrar mensaje y dejar el form vacío.
+    if (!libroData.title && libroData.authors.length === 0) {
+      toast('No se pudieron extraer datos. Cargalo a mano.', 'error');
+      openBookForm({});
+      return;
+    }
+
+    toast('Datos extraídos. Revisá y guardá.', 'success');
+    openBookForm(libroData);
+
+  } catch (err) {
+    closeModal();
+    console.error('Scan error:', err);
+    toast('Error: ' + err.message, 'error');
+  }
+}
+
+// ============================================================
 // CRUD operations
 // ============================================================
 
@@ -1173,8 +1357,12 @@ async function importAll(file) {
 // ============================================================
 
 function bindEvents() {
-  document.getElementById('scanBtn').addEventListener('click', openScanner);
+  document.getElementById('scanPhotoBtn').addEventListener('click', openPhotoScanner);
+  document.getElementById('scanIsbnBtn').addEventListener('click', openScanner);
   document.getElementById('addManualBtn').addEventListener('click', () => openBookForm({}));
+
+  // Cambio en el input de foto: cuando el usuario saca una foto desde el celular
+  document.getElementById('photoFileInput').addEventListener('change', handlePhotoCapture);
   document.getElementById('locationsBtn').addEventListener('click', openLocationsManager);
   document.getElementById('manageHouseholdBtn').addEventListener('click', openHouseholdManager);
   document.getElementById('aboutLink').addEventListener('click', e => { e.preventDefault(); openAbout(); });

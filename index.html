@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1d2d44">
-  <meta name="description" content="Organizá tu biblioteca física. Escaneá ISBN, prestá a amigos, no perdás nunca más un libro.">
+  <meta name="description" content="Organizá tu biblioteca física. Sacá foto al lomo, prestá a amigos, no perdás nunca más un libro.">
 
   <title>perdimilibro · tu biblioteca, ordenada</title>
 
@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Karla:wght@300..700&display=swap" rel="stylesheet">
 
-  <!-- Scanner -->
+  <!-- Scanner ISBN (fallback) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <link rel="stylesheet" href="styles.css">
@@ -46,10 +46,13 @@
        ========================= -->
   <nav class="toolbar">
     <div class="toolbar-inner">
-      <button class="btn primary" id="scanBtn">
-        <span>📷</span> Escanear ISBN
+      <button class="btn primary" id="scanPhotoBtn">
+        <span>📷</span> Escanear lomo (foto)
       </button>
-      <button class="btn" id="addManualBtn">＋ Agregar manual</button>
+      <button class="btn" id="scanIsbnBtn" title="Si el libro tiene código de barras claro">
+        <span>📊</span> ISBN
+      </button>
+      <button class="btn" id="addManualBtn">＋ Manual</button>
 
       <div class="search">
         <input type="text" id="searchInput" placeholder="Buscar título, autor, palabra…" autocomplete="off">
@@ -108,11 +111,9 @@
             <stop offset="100%" stop-color="#d4c094"/>
           </linearGradient>
         </defs>
-        <!-- Estantes -->
         <rect x="0" y="120" width="1200" height="6" fill="url(#shelfGrad)"/>
         <rect x="0" y="280" width="1200" height="6" fill="url(#shelfGrad)"/>
         <rect x="0" y="440" width="1200" height="6" fill="url(#shelfGrad)"/>
-        <!-- Libros estante 1 -->
         <g id="row1"></g>
         <g id="row2"></g>
         <g id="row3"></g>
@@ -120,9 +121,9 @@
 
       <div class="message">
         <h2>Una biblioteca empieza con un libro</h2>
-        <p>Escaneá el código de barras de cualquier libro de tu casa para empezar. O agregá uno manualmente si no tiene ISBN.</p>
+        <p>Sacale una foto al lomo de cualquier libro y la app extrae los datos automáticamente. O cargá uno manualmente.</p>
         <div class="empty-actions">
-          <button class="btn primary" onclick="document.getElementById('scanBtn').click()">📷 Escanear primer libro</button>
+          <button class="btn primary" onclick="document.getElementById('scanPhotoBtn').click()">📷 Escanear primer libro</button>
           <button class="btn" onclick="document.getElementById('addManualBtn').click()">＋ Agregar manual</button>
         </div>
       </div>
@@ -145,7 +146,7 @@
       <a href="#" id="aboutLink">Acerca de</a>
     </div>
     <div class="signature">
-      perdimilibro · v0.1 (MVP) · hecho en Buenos Aires
+      perdimilibro · v0.2 (MVP) · hecho en Buenos Aires
     </div>
   </footer>
 
@@ -160,9 +161,10 @@
   <div id="toastRoot"></div>
 
   <!-- =========================
-       INPUT OCULTO PARA IMPORT
+       INPUTS OCULTOS
        ========================= -->
   <input type="file" id="importFile" accept="application/json" class="hidden">
+  <input type="file" id="photoFileInput" accept="image/*" capture="environment" class="hidden">
 
   <!-- Service worker registration -->
   <script>

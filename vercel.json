@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/scan-libro.js": {
+      "maxDuration": 10
+    }
+  }
+}

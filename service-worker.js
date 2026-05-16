@@ -1,5 +1,6 @@
 // perdimilibro service worker — cache simple, network-first para HTML, cache-first para estáticos
-const VERSION = 'v0.1.0';
+// Bump VERSION en cada deploy para invalidar cache.
+const VERSION = 'v0.2.0';
 const CACHE = `perdimilibro-${VERSION}`;
 
 const PRECACHE = [
@@ -29,12 +30,15 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // Nunca cachear las llamadas a APIs externas (Google Books, Open Library)
+  // Nunca cachear:
+  //  - Llamadas al backend de scan (/api/...) → siempre live, son POST.
+  //  - APIs externas de metadata por ISBN (Google Books, Open Library).
+  if (url.pathname.startsWith('/api/')) return;
   if (url.hostname.includes('googleapis.com') || url.hostname.includes('openlibrary.org')) {
     return;
   }
 
-  // HTML: network-first
+  // HTML: network-first (para que los deploys se vean rápido).
   if (e.request.mode === 'navigate' || e.request.destination === 'document') {
     e.respondWith(
       fetch(e.request).then(r => {
@@ -46,7 +50,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Resto: cache-first
+  // Resto (CSS, JS, imágenes, fuentes): cache-first.
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
       const copy = resp.clone();
