@@ -1,0 +1,159 @@
+/* ============================================================
+   perdimilibro — auth pages (login, signup, forgot, reset)
+   Usa los tokens de styles.css. Layout centrado, card amplia.
+   ============================================================ */
+
+body.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: var(--paper);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem 1.75rem;
+}
+
+.auth-card .brand {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.auth-card .brand h1 {
+  font-size: 1.8rem;
+  color: var(--navy);
+}
+.auth-card .brand .tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.auth-card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+  color: var(--ink);
+}
+.auth-card .subtitle {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-form .field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.auth-form label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  font-family: var(--sans);
+  font-size: 1rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--navy);
+  background: #fff;
+}
+
+.auth-form button[type="submit"] {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.auth-form button[type="submit"]:hover:not(:disabled) {
+  background: var(--navy-deep);
+}
+.auth-form button[type="submit"]:disabled {
+  background: var(--line-strong);
+  cursor: wait;
+}
+
+.auth-foot {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.auth-foot a {
+  color: var(--navy);
+}
+
+.auth-msg {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+}
+.auth-msg.error {
+  background: rgba(184, 92, 56, 0.1);
+  color: #8a3a1c;
+  border: 1px solid rgba(184, 92, 56, 0.3);
+}
+.auth-msg.success {
+  background: rgba(107, 122, 61, 0.12);
+  color: #455020;
+  border: 1px solid rgba(107, 122, 61, 0.3);
+}
+.auth-msg.info {
+  background: rgba(29, 45, 68, 0.08);
+  color: var(--navy);
+  border: 1px solid rgba(29, 45, 68, 0.2);
+}
+
+.migration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(246, 236, 217, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.migration-overlay .box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  max-width: 360px;
+}
+.migration-overlay .spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--line);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

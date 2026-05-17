@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d2d44">
+  <title>Crear cuenta · perdimilibro</title>
+
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Karla:wght@300..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="brand">
+      <h1>perdimilibro</h1>
+      <div class="tagline">tu biblioteca, ordenada de verdad</div>
+    </div>
+
+    <h2>Crear cuenta</h2>
+    <p class="subtitle">Mínimo 6 caracteres en la contraseña.</p>
+
+    <div id="msg" class="auth-msg" style="display:none"></div>
+
+    <form id="signupForm" class="auth-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" inputmode="email">
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
+      </div>
+      <div class="field">
+        <label for="password2">Repetir contraseña</label>
+        <input type="password" id="password2" name="password2" required autocomplete="new-password" minlength="6">
+      </div>
+      <button type="submit" id="submitBtn">Crear cuenta</button>
+    </form>
+
+    <div class="auth-foot">
+      ¿Ya tenés cuenta? <a href="login.html">Ingresar</a>
+    </div>
+  </div>
+
+  <!-- Overlay durante la migración -->
+  <div id="migrationOverlay" class="migration-overlay" style="display:none">
+    <div class="box">
+      <div class="spinner"></div>
+      <h3 style="margin: 0 0 0.5rem">Importando tu biblioteca…</h3>
+      <p id="migrationMsg" style="margin: 0; color: var(--ink-soft); font-size: 0.92rem;">
+        Subiendo libros al servidor. No cierres la ventana.
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { signUp, redirectIfAuthed } from './auth.js';
+    import { hasLocalDataToMigrate, migrateLocalToSupabase, markMigrationDone } from './migrate.js';
+
+    redirectIfAuthed();
+
+    const form     = document.getElementById('signupForm');
+    const btn      = document.getElementById('submitBtn');
+    const msgBox   = document.getElementById('msg');
+    const overlay  = document.getElementById('migrationOverlay');
+    const migMsg   = document.getElementById('migrationMsg');
+
+    function showMsg(text, kind = 'error') {
+      msgBox.textContent = text;
+      msgBox.className = `auth-msg ${kind}`;
+      msgBox.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email     = document.getElementById('email').value.trim();
+      const password  = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+
+      if (password !== password2) {
+        showMsg('Las contraseñas no coinciden.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creando…';
+      msgBox.style.display = 'none';
+
+      try {
+        const result = await signUp(email, password);
+
+        // Caso 1: Supabase tiene email confirmation activado → no hay sesión todavía.
+        // Caso 2: confirmation desactivado → sesión inmediata.
+        if (!result.session) {
+          showMsg(`Cuenta creada. Te mandamos un email a ${email} para confirmar. Revisá tu inbox (y spam).`, 'success');
+          btn.textContent = 'Listo';
+          return;
+        }
+
+        // Con sesión: si hay data local, migrar.
+        if (await hasLocalDataToMigrate()) {
+          overlay.style.display = 'flex';
+          try {
+            const stats = await migrateLocalToSupabase();
+            migMsg.textContent = `Listo: ${stats.books} libros, ${stats.members} dueños, ${stats.locations} ubicaciones.`;
+            await new Promise(r => setTimeout(r, 1200));
+          } catch (migErr) {
+            // No bloqueamos el flujo si falla — el user igual queda logueado.
+            console.error('Migración falló:', migErr);
+            migMsg.textContent = 'No se pudo importar la biblioteca local. Podés volver a intentarlo desde la app.';
+            await new Promise(r => setTimeout(r, 2500));
+          }
+        } else {
+          markMigrationDone();
+        }
+
+        window.location.replace('/');
+      } catch (err) {
+        showMsg(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Crear cuenta';
+      }
+    });
+  </script>
+</body>
+</html>

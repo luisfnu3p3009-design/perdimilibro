@@ -8,6 +8,27 @@
 
   <title>perdimilibro · tu biblioteca, ordenada</title>
 
+  <!-- ============================================================
+       FAST AUTH GUARD
+       Redirige a /login.html antes de renderizar nada si no hay
+       sesión en localStorage. Es una optimización: app.js hace el
+       chequeo real (server-side) al cargar. Si Supabase cambia el
+       formato de su key en localStorage, esto deja de optimizar
+       pero la app sigue funcionando (el chequeo lento toma el relevo).
+       ============================================================ -->
+  <script>
+    (function() {
+      try {
+        // Si vienen con un token en el hash de la URL (confirmation o
+        // password reset que apunta acá), dejar pasar — el SDK lo procesa.
+        const h = window.location.hash || '';
+        if (h.includes('access_token=') || h.includes('type=recovery')) return;
+        const hasSession = Object.keys(localStorage).some(k => /^sb-.*-auth-token$/.test(k));
+        if (!hasSession) window.location.replace('/login.html');
+      } catch (e) { /* no localStorage → seguir, app.js redirige */ }
+    })();
+  </script>
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -36,7 +57,8 @@
       <div class="household-switcher" id="householdSwitcher">
         <span>Hogar:</span>
         <select id="householdSelect"></select>
-        <button class="btn small ghost" id="manageHouseholdBtn" title="Gestionar hogares">⚙</button>
+        <button class="btn small ghost" id="manageHouseholdBtn" title="Gestionar miembros">⚙</button>
+        <button class="btn small ghost" id="logoutBtn" title="Cerrar sesión" style="display:none">Salir</button>
       </div>
     </div>
   </header>
@@ -146,7 +168,7 @@
       <a href="#" id="aboutLink">Acerca de</a>
     </div>
     <div class="signature">
-      perdimilibro · v0.2 (MVP) · hecho en Buenos Aires
+      perdimilibro · v0.3 (MVP con cuentas) · hecho en Buenos Aires
     </div>
   </footer>
 

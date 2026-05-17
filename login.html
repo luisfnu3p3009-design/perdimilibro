@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d2d44">
+  <title>Ingresar · perdimilibro</title>
+
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Karla:wght@300..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="brand">
+      <h1>perdimilibro</h1>
+      <div class="tagline">tu biblioteca, ordenada de verdad</div>
+    </div>
+
+    <h2>Ingresar</h2>
+    <p class="subtitle">Bienvenido de vuelta.</p>
+
+    <div id="msg" class="auth-msg" style="display:none"></div>
+
+    <form id="loginForm" class="auth-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" inputmode="email">
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" minlength="6">
+      </div>
+      <button type="submit" id="submitBtn">Entrar</button>
+    </form>
+
+    <div class="auth-foot">
+      <a href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+      <br><br>
+      ¿No tenés cuenta? <a href="signup.html">Crear cuenta</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { signIn, redirectIfAuthed } from './auth.js';
+    import { markMigrationDone } from './migrate.js';
+
+    // Si ya hay sesión, ir directo a la app
+    redirectIfAuthed();
+
+    const form     = document.getElementById('loginForm');
+    const btn      = document.getElementById('submitBtn');
+    const msgBox   = document.getElementById('msg');
+
+    function showMsg(text, kind = 'error') {
+      msgBox.textContent = text;
+      msgBox.className = `auth-msg ${kind}`;
+      msgBox.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Entrando…';
+      msgBox.style.display = 'none';
+
+      try {
+        await signIn(email, password);
+        // Login (no signup) → marcamos migración como hecha SIN migrar,
+        // para evitar que un user con IndexedDB de otra cuenta lo cruce.
+        markMigrationDone();
+        window.location.replace('/');
+      } catch (err) {
+        showMsg(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>

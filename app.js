@@ -1,90 +1,14 @@
 // ============================================================
-// perdimilibro — app.js
+// perdimilibro — app.js  (v0.3, con auth + Supabase)
 // ============================================================
-// Arquitectura: vanilla JS + IndexedDB. Sin build step.
-// Estado global mutable + render manual. Cuando se conecte
-// a Supabase, las funciones db.* son las únicas que cambian.
-// ============================================================
-
-// ============================================================
-// IndexedDB layer
+// Arquitectura: vanilla JS + Supabase. Sin build step.
+// El objeto `db` (importado de db.js) tiene la misma API que
+// tenía cuando era IndexedDB; solo cambia la implementación.
+// La seguridad la da Row Level Security en Postgres.
 // ============================================================
 
-const DB_NAME = 'perdimilibro';
-const DB_VERSION = 1;
-
-const db = {
-  _db: null,
-
-  async open() {
-    if (this._db) return this._db;
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onerror = () => reject(req.error);
-      req.onsuccess = () => { this._db = req.result; resolve(this._db); };
-      req.onupgradeneeded = (e) => {
-        const _db = e.target.result;
-        if (!_db.objectStoreNames.contains('households'))   _db.createObjectStore('households',   { keyPath: 'id' });
-        if (!_db.objectStoreNames.contains('members'))      _db.createObjectStore('members',      { keyPath: 'id' });
-        if (!_db.objectStoreNames.contains('locations'))    _db.createObjectStore('locations',    { keyPath: 'id' });
-        if (!_db.objectStoreNames.contains('books'))        _db.createObjectStore('books',        { keyPath: 'id' });
-        if (!_db.objectStoreNames.contains('loans'))        _db.createObjectStore('loans',        { keyPath: 'id' });
-        if (!_db.objectStoreNames.contains('isbn_cache'))   _db.createObjectStore('isbn_cache',   { keyPath: 'isbn' });
-        if (!_db.objectStoreNames.contains('settings'))     _db.createObjectStore('settings',     { keyPath: 'key' });
-      };
-    });
-  },
-
-  async _tx(store, mode = 'readonly') {
-    const _db = await this.open();
-    return _db.transaction(store, mode).objectStore(store);
-  },
-
-  async put(store, value) {
-    return new Promise(async (resolve, reject) => {
-      const tx = await this._tx(store, 'readwrite');
-      const req = tx.put(value);
-      req.onsuccess = () => resolve(value);
-      req.onerror = () => reject(req.error);
-    });
-  },
-
-  async get(store, key) {
-    return new Promise(async (resolve, reject) => {
-      const tx = await this._tx(store);
-      const req = tx.get(key);
-      req.onsuccess = () => resolve(req.result || null);
-      req.onerror = () => reject(req.error);
-    });
-  },
-
-  async all(store) {
-    return new Promise(async (resolve, reject) => {
-      const tx = await this._tx(store);
-      const req = tx.getAll();
-      req.onsuccess = () => resolve(req.result || []);
-      req.onerror = () => reject(req.error);
-    });
-  },
-
-  async del(store, key) {
-    return new Promise(async (resolve, reject) => {
-      const tx = await this._tx(store, 'readwrite');
-      const req = tx.delete(key);
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  },
-
-  async clear(store) {
-    return new Promise(async (resolve, reject) => {
-      const tx = await this._tx(store, 'readwrite');
-      const req = tx.clear();
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  }
-};
+import { db }                          from './db.js';
+import { requireAuth, signOut, getUser } from './auth.js';
 
 // ============================================================
 // State
@@ -101,49 +25,48 @@ const state = {
   filters: { search: '', location: '', status: '', owner: '' }
 };
 
-const uid = () => 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+// UUIDs nativos del browser, compatibles con columnas uuid de Postgres.
+const uid = () => crypto.randomUUID();
 
 // ============================================================
 // Initialization & seed
 // ============================================================
 
 async function init() {
+  // 1. Bloquear si no hay sesión. requireAuth redirige a /login.html.
+  const user = await requireAuth();
+  if (!user) return;
+
+  // 2. Setup del botón "Salir" (visible solo si hay sesión)
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.style.display = '';
+    logoutBtn.addEventListener('click', async () => {
+      if (!confirm('¿Cerrar sesión?')) return;
+      await signOut();
+      window.location.replace('/login.html');
+    });
+  }
+  const userEmailEl = document.getElementById('userEmail');
+  if (userEmailEl) userEmailEl.textContent = user.email;
+
+  // 3. Abrir DB (no-op con Supabase, pero mantenemos la llamada)
   await db.open();
 
-  // Migración: primera carga
+  // 4. Cargar households. En el modelo 1 user = 1 household, esto
+  //    siempre devuelve 1 row (creado por el trigger on_auth_user_created).
+  //    Dejamos el fallback de seed por si alguien corre sin trigger.
   state.households = await db.all('households');
   if (state.households.length === 0) {
-    const home = {
-      id: uid(),
-      name: 'Mi biblioteca',
-      created_at: new Date().toISOString()
-    };
+    console.warn('No hay household para este user. ¿Está instalado el trigger SQL? Creando uno manualmente como fallback…');
+    const home = { id: uid(), name: 'Mi biblioteca', owner_user_id: user.id, created_at: new Date().toISOString() };
     await db.put('households', home);
     state.households = [home];
-
-    // Primer miembro
-    const me = {
-      id: uid(),
-      household_id: home.id,
-      name: 'Yo',
-      color: '#1d2d44',
-      created_at: new Date().toISOString()
-    };
-    await db.put('members', me);
-
-    // Ubicación raíz por defecto
-    const root = {
-      id: uid(),
-      household_id: home.id,
-      parent_id: null,
-      name: 'Living',
-      position: 0,
-      created_at: new Date().toISOString()
-    };
-    await db.put('locations', root);
+    await db.put('members',   { id: uid(), household_id: home.id, name: 'Yo',     color: '#1d2d44', created_at: new Date().toISOString() });
+    await db.put('locations', { id: uid(), household_id: home.id, parent_id: null, name: 'Living', position: 0, created_at: new Date().toISOString() });
   }
 
-  // Pick current household
+  // 5. Pick current household
   const lastHH = await db.get('settings', 'current_household');
   state.currentHouseholdId = lastHH?.value || state.households[0].id;
 
@@ -533,15 +456,11 @@ async function addMember(data) {
 }
 
 async function addHousehold(name) {
-  const home = {
-    id: uid(),
-    name,
-    created_at: new Date().toISOString()
-  };
-  await db.put('households', home);
-  state.households.push(home);
-  await setCurrentHousehold(home.id);
-  renderHouseholdSwitcher();
+  // En el modelo actual cada user tiene exactamente 1 biblioteca.
+  // La unique index households_owner_unique en Supabase rechazaría el insert.
+  // Si en el futuro se abre a múltiples bibliotecas, reactivar esta función.
+  toast('No se pueden crear bibliotecas adicionales en esta versión', 'error');
+  console.warn('addHousehold deshabilitado: 1 user = 1 household. Nombre intentado:', name);
 }
 
 // ============================================================
@@ -1212,26 +1131,19 @@ window.removeLocation = async (id) => {
 
 function openHouseholdManager() {
   modal({
-    title: 'Gestionar hogares y miembros',
+    title: 'Gestionar tu biblioteca',
     body: `
-      <h3 style="font-family:var(--serif); font-style:italic; color:var(--navy); margin-bottom:0.8rem;">Hogares</h3>
+      <h3 style="font-family:var(--serif); font-style:italic; color:var(--navy); margin-bottom:0.8rem;">Tu biblioteca</h3>
       <ul style="list-style:none; padding:0; margin:0 0 1.5rem 0;">
         ${state.households.map(h => `
           <li style="padding:0.5rem 0; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; align-items:center;">
-            <span class="${h.id === state.currentHouseholdId ? 'serif italic' : ''}">${escapeHtml(h.name)}${h.id === state.currentHouseholdId ? ' · <span style="color:var(--olive)">actual</span>' : ''}</span>
-            <button class="btn small" onclick="window.switchHousehold('${h.id}')">Usar</button>
+            <span class="serif italic">${escapeHtml(h.name)}</span>
           </li>
         `).join('')}
       </ul>
-      <div class="field-row">
-        <div class="field">
-          <label>Nuevo hogar</label>
-          <input type="text" id="newHHName" placeholder="Ej: Casa de los abuelos">
-        </div>
-        <div class="field" style="display:flex; align-items:flex-end;">
-          <button class="btn primary" id="btnAddHH">Crear hogar</button>
-        </div>
-      </div>
+      <p style="font-size:0.85rem; color:var(--ink-soft); margin: 0 0 1.5rem 0;">
+        Cada cuenta tiene una biblioteca. Si querés compartir libros con otra persona, por ahora exportá tu archivo y que ella lo importe.
+      </p>
 
       <hr class="divider">
 
@@ -1255,17 +1167,6 @@ function openHouseholdManager() {
       </div>
     `,
     footer: `<button class="btn ghost" onclick="window.closeModal()">Listo</button>`
-  });
-
-  document.getElementById('btnAddHH').addEventListener('click', async () => {
-    const name = document.getElementById('newHHName').value.trim();
-    if (!name) return;
-    await addHousehold(name);
-    closeModal();
-    renderHouseholdSwitcher();
-    renderFilters();
-    render();
-    toast('Hogar creado', 'success');
   });
 
   document.getElementById('btnAddMember').addEventListener('click', async () => {
@@ -1293,11 +1194,11 @@ function openAbout() {
       <p class="serif italic" style="font-size:1.1rem; color:var(--navy); margin-bottom:1rem;">
         Una app casual para no perder nunca más un libro de tu biblioteca física.
       </p>
-      <p>Versión: <strong>0.1 (MVP design partners)</strong></p>
+      <p>Versión: <strong>0.3 (MVP con cuentas)</strong></p>
       <p>Hecho en Buenos Aires.</p>
       <hr class="divider">
       <p style="font-size:0.9rem; color:var(--ink-soft);">
-        Esta es una versión muy temprana. Tus datos se guardan localmente en este dispositivo. Para hacer copia de seguridad, usá el botón ⤓ Exportar de la barra superior.
+        Tu biblioteca está guardada en la nube y atada a tu cuenta. Podés acceder desde cualquier dispositivo logueándote con tu email. Igual podés exportar todo con el botón ⤓ Exportar si querés tener un backup.
       </p>
       <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:1rem;">
         <a href="terminos.html">Términos y Condiciones</a> · <a href="privacidad.html">Política de Privacidad</a>
