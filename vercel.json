@@ -1,7 +1,10 @@
 {
   "functions": {
     "api/scan-libro.js": {
-      "maxDuration": 10
+      "maxDuration": 15
+    },
+    "api/scan-estante.js": {
+      "maxDuration": 30
     }
   }
 }

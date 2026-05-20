@@ -71,6 +71,9 @@
       <button class="btn primary" id="scanPhotoBtn">
         <span>📷</span> Escanear lomo (foto)
       </button>
+      <button class="btn primary" id="scanEstanteBtn" title="Escaneá varios libros de una sola foto (hasta 12)">
+        <span>📚</span> Escanear estante
+      </button>
       <button class="btn" id="scanIsbnBtn" title="Si el libro tiene código de barras claro">
         <span>📊</span> ISBN
       </button>
@@ -168,7 +171,7 @@
       <a href="#" id="aboutLink">Acerca de</a>
     </div>
     <div class="signature">
-      perdimilibro · v0.3 (MVP con cuentas) · hecho en Buenos Aires
+      perdimilibro · v0.4 (multi-libro) · hecho en Buenos Aires
     </div>
   </footer>
 
@@ -187,6 +190,7 @@
        ========================= -->
   <input type="file" id="importFile" accept="application/json" class="hidden">
   <input type="file" id="photoFileInput" accept="image/*" capture="environment" class="hidden">
+  <input type="file" id="estanteFileInput" accept="image/*" capture="environment" class="hidden">
 
   <!-- Service worker registration -->
   <script>

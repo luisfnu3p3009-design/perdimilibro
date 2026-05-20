@@ -956,3 +956,173 @@ main {
   margin: var(--gap-lg) 0;
   border: none;
 }
+
+/* ============================================================
+   Multi-libro: modal de revisión post-scan de estante
+   ============================================================ */
+
+.multi-nota-general {
+  background: var(--paper-warm);
+  border-left: 4px solid var(--terracotta);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.multi-review-help {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.multi-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--paper-deep);
+}
+
+.multi-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.multi-card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-deep);
+  border-radius: 6px;
+  padding: 0.75rem;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+.multi-card.unchecked {
+  opacity: 0.5;
+  border-style: dashed;
+  background: transparent;
+}
+
+.multi-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--paper-deep);
+}
+
+.multi-card-check-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.multi-card-check {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--navy);
+}
+
+.multi-card-position {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.multi-card-confidence {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.multi-conf-high {
+  background: var(--olive);
+  color: var(--paper);
+}
+
+.multi-conf-medium {
+  background: #c9a227;
+  color: var(--ink);
+}
+
+.multi-conf-low {
+  background: var(--terracotta);
+  color: var(--paper);
+}
+
+.multi-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.multi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.multi-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.multi-field label .text-muted {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.7rem;
+}
+
+.multi-input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--paper-deep);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.multi-input:focus {
+  outline: 2px solid var(--terracotta-soft);
+  outline-offset: 1px;
+  border-color: var(--terracotta);
+}
+
+.multi-field-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.multi-field-row .multi-field {
+  flex: 1;
+}
+
+.multi-field-narrow {
+  flex: 0 0 90px !important;
+}
+
+/* Mobile: pila vertical de editorial y año */
+@media (max-width: 500px) {
+  .multi-field-row {
+    flex-direction: column;
+  }
+  .multi-field-narrow {
+    flex: 1 !important;
+  }
+}

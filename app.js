@@ -341,6 +341,322 @@ async function handlePhotoCapture(e) {
 }
 
 // ============================================================
+// Scan multi-libro (estante completo, vía /api/scan-estante)
+// ------------------------------------------------------------
+// Flujo: foto → backend devuelve hasta 12 libros con confidence →
+// modal de revisión con cards editables → user marca/desmarca/edita
+// → addBook en loop para los marcados.
+// ============================================================
+
+/**
+ * Igual que scanLibroDesdeFoto pero pegándole al endpoint multi.
+ * Devuelve el JSON crudo (libros[], total_detectados, nota_general).
+ * Resize a 2400px (vs 1600px del single) porque cada lomo es chico
+ * dentro de una foto de estante y necesitamos resolución.
+ */
+async function scanEstanteDesdeFoto(file) {
+  const blob = await reducirImagen(file, 2400, 0.85);
+  const base64 = await blobABase64(blob);
+
+  const resp = await fetch('/api/scan-estante', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imagen_base64: base64, media_type: 'image/jpeg' })
+  });
+
+  let data;
+  try { data = await resp.json(); }
+  catch { throw new Error(`Respuesta inválida del servidor (HTTP ${resp.status})`); }
+
+  if (!resp.ok) {
+    throw new Error(data.error || `Error HTTP ${resp.status}`);
+  }
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
+  return data;
+}
+
+function openEstanteScanner() {
+  const input = document.getElementById('estanteFileInput');
+  input.value = '';
+  input.click();
+}
+
+async function handleEstanteCapture(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  modal({
+    title: 'Analizando el estante',
+    body: `
+      <div style="text-align:center; padding:1.5rem 0;">
+        <div class="serif italic" style="font-size:1.1rem; color:var(--navy); margin-bottom:1rem;">
+          Claude está leyendo los lomos…
+        </div>
+        <div class="text-muted" style="font-size:0.9rem;">
+          Esto puede tardar entre 10 y 20 segundos según cuántos libros tenga.
+        </div>
+        <div id="scanProgress" style="margin-top:1.5rem; font-size:0.85rem; color:var(--ink-soft);">
+          Reduciendo imagen…
+        </div>
+      </div>
+    `,
+    footer: ''
+  });
+
+  try {
+    const progress = document.getElementById('scanProgress');
+    if (progress) progress.textContent = 'Enviando a Claude…';
+
+    const data = await scanEstanteDesdeFoto(file);
+    closeModal();
+
+    if (!data.libros || data.libros.length === 0) {
+      toast('No se detectaron libros en la foto. Probá con mejor luz o más cerca.', 'error');
+      return;
+    }
+
+    openMultiReviewModal(data);
+
+  } catch (err) {
+    closeModal();
+    console.error('Multi-scan error:', err);
+    toast('Error: ' + err.message, 'error');
+  }
+}
+
+/**
+ * Modal de revisión multi-libro. Renderiza una card por libro detectado
+ * con campos editables y checkbox de inclusión. Default:
+ *   - high   → marcado
+ *   - medium → marcado
+ *   - low    → DESMARCADO (el user revisa conscientemente)
+ *
+ * Toggle "marcar/desmarcar todos" arriba para bulk.
+ */
+function openMultiReviewModal(data) {
+  const libros = data.libros;
+  const notaGeneral = data.nota_general;
+
+  // Pre-procesar cada libro: agregar índice y estado de selección inicial.
+  const items = libros.map((libro, idx) => ({
+    idx,
+    libro,
+    selected: libro.confidence === 'high' || libro.confidence === 'medium',
+  }));
+
+  const cardsHTML = items.map(item => renderReviewCard(item)).join('');
+
+  const notaHTML = notaGeneral
+    ? `<div class="multi-nota-general">📝 ${escapeHtml(notaGeneral)}</div>`
+    : '';
+
+  const initialMarcados = items.filter(i => i.selected).length;
+
+  modal({
+    title: `Revisar ${libros.length} libros detectados`,
+    body: `
+      ${notaHTML}
+      <div class="multi-review-help">
+        Revisá cada libro antes de guardarlo. Editá los campos si hay errores y desmarcá los que no quieras agregar. Los libros con confianza baja (🔴) empiezan desmarcados — revisalos vos.
+      </div>
+      <div class="multi-toolbar">
+        <button class="btn small ghost" id="selectAllBtn">Marcar todos</button>
+        <button class="btn small ghost" id="deselectAllBtn">Desmarcar todos</button>
+      </div>
+      <div id="multiReviewList" class="multi-review-list">
+        ${cardsHTML}
+      </div>
+    `,
+    footer: `
+      <button class="btn ghost" id="cancelMultiBtn">Cancelar</button>
+      <button class="btn primary" id="confirmMultiBtn">
+        Agregar <span id="marcadosCount">${initialMarcados}</span> libros
+      </button>
+    `
+  });
+
+  // ----- Wire up de eventos del modal -----
+
+  // Update del contador "Marcados X" cuando se toca cualquier checkbox.
+  const updateCount = () => {
+    const count = document.querySelectorAll('.multi-card-check:checked').length;
+    document.getElementById('marcadosCount').textContent = count;
+    const btn = document.getElementById('confirmMultiBtn');
+    btn.disabled = count === 0;
+  };
+
+  document.querySelectorAll('.multi-card-check').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const card = cb.closest('.multi-card');
+      card.classList.toggle('unchecked', !cb.checked);
+      updateCount();
+    });
+  });
+
+  document.getElementById('selectAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.multi-card-check').forEach(cb => {
+      cb.checked = true;
+      cb.closest('.multi-card').classList.remove('unchecked');
+    });
+    updateCount();
+  });
+
+  document.getElementById('deselectAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.multi-card-check').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.multi-card').classList.add('unchecked');
+    });
+    updateCount();
+  });
+
+  document.getElementById('cancelMultiBtn').addEventListener('click', closeModal);
+  document.getElementById('confirmMultiBtn').addEventListener('click', () => agregarLibrosMarcados(items));
+
+  updateCount();
+}
+
+/**
+ * HTML de una card individual. Cuatro campos editables (título, autor,
+ * editorial, año) más checkbox de inclusión y badge de confidence.
+ * Los datos crudos del modelo viajan en data-* attrs para poder
+ * reconstruir el objeto completo al guardar (preservando subtitulo,
+ * edicion, tomo, isbn, idioma — que no se editan en el modal pero
+ * se mantienen).
+ */
+function renderReviewCard({ idx, libro, selected }) {
+  const conf = libro.confidence || 'low';
+  const confLabel = { high: 'Alta', medium: 'Media', low: 'Baja' }[conf];
+  const confEmoji = { high: '🟢', medium: '🟡', low: '🔴' }[conf];
+  const posicion = libro.posicion || `Libro ${idx + 1}`;
+  const titulo = libro.titulo || '';
+  const autor = libro.autor || '';
+  const editorial = libro.editorial || '';
+  const anio = libro.anio || '';
+
+  // Stash de datos no editables para reconstrucción posterior.
+  const stash = JSON.stringify({
+    subtitulo: libro.subtitulo || null,
+    edicion: libro.edicion || null,
+    tomo: libro.tomo || null,
+    isbn: libro.isbn || null,
+    idioma: libro.idioma || 'Espanol',
+    nota: libro.nota || null,
+  });
+
+  return `
+    <div class="multi-card ${selected ? '' : 'unchecked'}" data-idx="${idx}" data-stash="${escapeHtml(stash)}">
+      <div class="multi-card-header">
+        <label class="multi-card-check-label">
+          <input type="checkbox" class="multi-card-check" ${selected ? 'checked' : ''}>
+        </label>
+        <div class="multi-card-position">${escapeHtml(posicion)}</div>
+        <div class="multi-card-confidence multi-conf-${conf}">
+          ${confEmoji} ${confLabel}
+        </div>
+      </div>
+      <div class="multi-card-body">
+        <div class="multi-field">
+          <label>Título</label>
+          <input type="text" class="multi-input" data-field="titulo" value="${escapeHtml(titulo)}" placeholder="(sin título)">
+        </div>
+        <div class="multi-field">
+          <label>Autor <span class="text-muted">(Apellido, Nombre)</span></label>
+          <input type="text" class="multi-input" data-field="autor" value="${escapeHtml(autor)}" placeholder="(sin autor)">
+        </div>
+        <div class="multi-field-row">
+          <div class="multi-field">
+            <label>Editorial</label>
+            <input type="text" class="multi-input" data-field="editorial" value="${escapeHtml(editorial)}">
+          </div>
+          <div class="multi-field multi-field-narrow">
+            <label>Año</label>
+            <input type="text" class="multi-input" data-field="anio" value="${escapeHtml(anio)}" maxlength="4">
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Loop final: recolecta los marcados, reconstruye el objeto completo
+ * (campos editados + stash de no editables) usando el mapper existente,
+ * y llama addBook por cada uno. Muestra progress y un toast al final.
+ */
+async function agregarLibrosMarcados(_items) {
+  const cards = Array.from(document.querySelectorAll('.multi-card'));
+  const marcadas = cards.filter(card =>
+    card.querySelector('.multi-card-check').checked
+  );
+
+  if (marcadas.length === 0) {
+    toast('No hay libros marcados para agregar.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('confirmMultiBtn');
+  btn.disabled = true;
+  const originalText = btn.innerHTML;
+
+  let agregados = 0;
+  let errores = 0;
+
+  for (let i = 0; i < marcadas.length; i++) {
+    const card = marcadas[i];
+    btn.innerHTML = `Agregando ${i + 1} de ${marcadas.length}…`;
+
+    try {
+      const stash = JSON.parse(card.dataset.stash);
+      const inputs = card.querySelectorAll('.multi-input');
+      const editados = {};
+      inputs.forEach(inp => { editados[inp.dataset.field] = inp.value.trim(); });
+
+      // Reconstruir el shape que el mapper espera (mismo que single).
+      const scanLike = {
+        autor: editados.autor,
+        titulo: editados.titulo,
+        editorial: editados.editorial,
+        anio: editados.anio || null,
+        subtitulo: stash.subtitulo,
+        edicion: stash.edicion,
+        tomo: stash.tomo,
+        isbn: stash.isbn,
+        idioma: stash.idioma,
+        nota: stash.nota,
+      };
+
+      // Skip si el user borró título Y autor — probablemente desistió de ese libro
+      // pero olvidó desmarcar la card.
+      if (!scanLike.titulo && !scanLike.autor) {
+        errores++;
+        continue;
+      }
+
+      const libroData = mapearScanALibro(scanLike);
+      await addBook(libroData);
+      agregados++;
+    } catch (err) {
+      console.error('Error agregando libro:', err);
+      errores++;
+    }
+  }
+
+  btn.innerHTML = originalText;
+  closeModal();
+
+  if (agregados > 0 && errores === 0) {
+    toast(`${agregados} libros agregados a tu biblioteca.`, 'success');
+  } else if (agregados > 0 && errores > 0) {
+    toast(`${agregados} agregados, ${errores} con error o vacíos.`, 'success');
+  } else {
+    toast(`No se pudo agregar ningún libro. ${errores} errores.`, 'error');
+  }
+}
+
+// ============================================================
 // CRUD operations
 // ============================================================
 
@@ -1259,11 +1575,13 @@ async function importAll(file) {
 
 function bindEvents() {
   document.getElementById('scanPhotoBtn').addEventListener('click', openPhotoScanner);
+  document.getElementById('scanEstanteBtn').addEventListener('click', openEstanteScanner);
   document.getElementById('scanIsbnBtn').addEventListener('click', openScanner);
   document.getElementById('addManualBtn').addEventListener('click', () => openBookForm({}));
 
   // Cambio en el input de foto: cuando el usuario saca una foto desde el celular
   document.getElementById('photoFileInput').addEventListener('change', handlePhotoCapture);
+  document.getElementById('estanteFileInput').addEventListener('change', handleEstanteCapture);
   document.getElementById('locationsBtn').addEventListener('click', openLocationsManager);
   document.getElementById('manageHouseholdBtn').addEventListener('click', openHouseholdManager);
   document.getElementById('aboutLink').addEventListener('click', e => { e.preventDefault(); openAbout(); });

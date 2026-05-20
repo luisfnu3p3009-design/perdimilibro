@@ -1,11 +1,11 @@
-// perdimilibro service worker — v0.3
+// perdimilibro service worker — v0.4
 // Estrategia:
 //   - network-first para HTML (los deploys se ven al instante)
 //   - cache-first para CSS/JS/imágenes
 //   - nunca cachear: /api/*, llamadas a Supabase, Google Books, Open Library
 // Bumpear VERSION en cada deploy para invalidar caches viejos.
 
-const VERSION = 'v0.3.0';
+const VERSION = 'v0.4.0';
 const CACHE = `perdimilibro-${VERSION}`;
 
 const PRECACHE = [
