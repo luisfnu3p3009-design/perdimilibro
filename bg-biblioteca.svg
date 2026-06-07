@@ -1,0 +1,270 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#E8DFD0"/>
+    <stop offset="100%" stop-color="#C9BEA9"/>
+  </linearGradient>
+  <linearGradient id="bookA" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1F3A5F"/>
+    <stop offset="100%" stop-color="#2A4870"/>
+  </linearGradient>
+  <linearGradient id="bookB" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#8B2D2D"/>
+    <stop offset="100%" stop-color="#A04040"/>
+  </linearGradient>
+  <linearGradient id="bookC" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#4A6FA5"/>
+    <stop offset="100%" stop-color="#5C82BB"/>
+  </linearGradient>
+  <linearGradient id="bookD" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#6A1B9A"/>
+    <stop offset="100%" stop-color="#8332B8"/>
+  </linearGradient>
+  <linearGradient id="bookE" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2E7D32"/>
+    <stop offset="100%" stop-color="#43A047"/>
+  </linearGradient>
+  <linearGradient id="bookF" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#5D4037"/>
+    <stop offset="100%" stop-color="#795548"/>
+  </linearGradient>
+  <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#8B6F47"/>
+    <stop offset="100%" stop-color="#6B5535"/>
+  </linearGradient>
+</defs>
+
+<!-- Fondo crema -->
+<rect width="1600" height="1100" fill="#FAF6EE"/>
+
+<!-- Piso -->
+<rect x="0" y="900" width="1600" height="200" fill="url(#floor)"/>
+
+<!-- Estanteria izquierda (perspectiva sutil) -->
+<g transform="translate(0,80)">
+  <!-- Marco -->
+  <rect x="0" y="0" width="540" height="820" fill="#FAF6EE"/>
+  <!-- 4 estantes con lomos -->
+<rect x="8" y="10" width="24" height="200" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="33" y="20" width="26" height="190" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="60" y="14" width="16" height="196" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="77" y="29" width="17" height="181" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="95" y="11" width="15" height="199" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="111" y="39" width="20" height="171" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="132" y="27" width="27" height="183" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="160" y="38" width="21" height="172" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="182" y="39" width="27" height="171" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="210" y="10" width="17" height="200" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="228" y="10" width="32" height="200" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="261" y="22" width="32" height="188" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="294" y="33" width="15" height="177" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="310" y="13" width="31" height="197" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="342" y="27" width="23" height="183" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="366" y="37" width="31" height="173" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="398" y="23" width="23" height="187" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="422" y="37" width="19" height="173" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="442" y="20" width="32" height="190" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="475" y="37" width="25" height="173" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="501" y="22" width="16" height="188" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="518" y="25" width="20" height="185" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="215" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="237" width="31" height="183" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="40" y="232" width="28" height="188" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="69" y="241" width="25" height="179" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="95" y="228" width="19" height="192" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="115" y="232" width="16" height="188" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="132" y="235" width="30" height="185" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="163" y="241" width="28" height="179" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="192" y="247" width="16" height="173" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="209" y="245" width="27" height="175" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="237" y="221" width="18" height="199" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="256" y="249" width="27" height="171" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="284" y="226" width="16" height="194" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="301" y="225" width="32" height="195" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="334" y="228" width="24" height="192" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="359" y="232" width="29" height="188" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="389" y="224" width="16" height="196" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="406" y="235" width="22" height="185" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="429" y="249" width="16" height="171" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="446" y="230" width="23" height="190" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="470" y="241" width="28" height="179" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="499" y="222" width="26" height="198" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="526" y="250" width="25" height="170" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="425" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="455" width="25" height="175" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="34" y="445" width="17" height="185" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="52" y="436" width="20" height="194" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="73" y="437" width="18" height="193" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="92" y="448" width="26" height="182" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="119" y="455" width="16" height="175" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="136" y="443" width="26" height="187" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="163" y="434" width="18" height="196" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="182" y="452" width="31" height="178" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="214" y="449" width="27" height="181" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="242" y="430" width="26" height="200" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="269" y="458" width="18" height="172" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="288" y="453" width="18" height="177" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="307" y="460" width="21" height="170" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="329" y="455" width="32" height="175" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="362" y="460" width="23" height="170" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="386" y="443" width="27" height="187" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="414" y="450" width="32" height="180" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="447" y="430" width="30" height="200" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="478" y="446" width="15" height="184" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="494" y="448" width="31" height="182" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="526" y="448" width="26" height="182" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="635" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="650" width="29" height="190" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="38" y="664" width="15" height="176" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="54" y="656" width="20" height="184" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="75" y="660" width="17" height="180" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="93" y="667" width="15" height="173" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="109" y="666" width="32" height="174" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="142" y="640" width="17" height="200" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="160" y="668" width="14" height="172" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="175" y="666" width="26" height="174" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="202" y="640" width="22" height="200" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="225" y="655" width="25" height="185" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="251" y="643" width="17" height="197" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="269" y="655" width="28" height="185" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="298" y="668" width="23" height="172" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="322" y="647" width="17" height="193" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="340" y="655" width="22" height="185" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="363" y="654" width="19" height="186" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="383" y="640" width="20" height="200" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="404" y="666" width="25" height="174" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="430" y="641" width="31" height="199" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="462" y="661" width="30" height="179" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="493" y="648" width="16" height="192" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="510" y="659" width="30" height="181" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="845" width="540" height="8" fill="url(#wood)"/>
+</g><g transform="translate(1060,80)">
+<rect x="0" y="0" width="540" height="820" fill="#FAF6EE"/>
+<rect x="8" y="31" width="22" height="179" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="31" y="20" width="19" height="190" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="51" y="13" width="18" height="197" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="70" y="36" width="19" height="174" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="90" y="13" width="31" height="197" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="122" y="40" width="23" height="170" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="146" y="14" width="18" height="196" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="165" y="32" width="14" height="178" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="180" y="13" width="16" height="197" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="197" y="17" width="28" height="193" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="226" y="15" width="18" height="195" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="245" y="13" width="25" height="197" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="271" y="12" width="29" height="198" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="301" y="27" width="32" height="183" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="334" y="12" width="25" height="198" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="360" y="20" width="24" height="190" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="385" y="14" width="25" height="196" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="411" y="18" width="22" height="192" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="434" y="21" width="31" height="189" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="466" y="26" width="18" height="184" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="485" y="23" width="28" height="187" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="514" y="34" width="23" height="176" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="215" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="239" width="30" height="181" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="39" y="236" width="25" height="184" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="65" y="238" width="22" height="182" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="88" y="235" width="32" height="185" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="121" y="232" width="21" height="188" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="143" y="228" width="20" height="192" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="164" y="248" width="18" height="172" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="183" y="238" width="28" height="182" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="212" y="221" width="27" height="199" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="240" y="246" width="21" height="174" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="262" y="230" width="28" height="190" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="291" y="227" width="19" height="193" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="311" y="222" width="22" height="198" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="334" y="228" width="20" height="192" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="355" y="234" width="25" height="186" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="381" y="222" width="18" height="198" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="400" y="227" width="21" height="193" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="422" y="223" width="20" height="197" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="443" y="232" width="15" height="188" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="459" y="249" width="32" height="171" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="492" y="227" width="32" height="193" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="525" y="245" width="24" height="175" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="425" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="455" width="20" height="175" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="29" y="457" width="31" height="173" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="61" y="458" width="19" height="172" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="81" y="435" width="31" height="195" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="113" y="446" width="15" height="184" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="129" y="444" width="16" height="186" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="146" y="451" width="18" height="179" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="165" y="451" width="27" height="179" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="193" y="441" width="32" height="189" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="226" y="430" width="16" height="200" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="243" y="449" width="30" height="181" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="274" y="450" width="14" height="180" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="289" y="445" width="18" height="185" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="308" y="444" width="31" height="186" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="340" y="439" width="21" height="191" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="362" y="435" width="23" height="195" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="386" y="444" width="26" height="186" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="413" y="437" width="19" height="193" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="433" y="447" width="22" height="183" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="456" y="452" width="20" height="178" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="477" y="453" width="32" height="177" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="510" y="442" width="21" height="188" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="635" width="540" height="8" fill="url(#wood)"/>
+<rect x="8" y="664" width="27" height="176" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="36" y="657" width="25" height="183" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="62" y="658" width="24" height="182" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="87" y="668" width="16" height="172" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="104" y="650" width="14" height="190" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="119" y="656" width="20" height="184" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="140" y="658" width="31" height="182" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="172" y="661" width="15" height="179" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="188" y="640" width="27" height="200" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="216" y="643" width="18" height="197" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="235" y="659" width="17" height="181" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="253" y="661" width="20" height="179" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="274" y="661" width="26" height="179" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="301" y="666" width="25" height="174" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="327" y="655" width="25" height="185" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="353" y="642" width="32" height="198" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="386" y="669" width="27" height="171" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="414" y="661" width="31" height="179" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="446" y="660" width="15" height="180" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="462" y="647" width="31" height="193" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="494" y="642" width="14" height="198" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="509" y="668" width="18" height="172" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="528" y="668" width="25" height="172" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="845" width="540" height="8" fill="url(#wood)"/>
+</g>
+<rect x="540" y="80" width="520" height="600" fill="#E0E8EF" opacity="0.6"/>
+<rect x="540" y="80" width="520" height="600" fill="none" stroke="#B0BCCB" stroke-width="3"/>
+<line x1="800" y1="80" x2="800" y2="680" stroke="#B0BCCB" stroke-width="2"/>
+<line x1="540" y1="380" x2="1060" y2="380" stroke="#B0BCCB" stroke-width="2"/>
+
+<!-- Estante bajo central -->
+<g transform="translate(540,690)"><rect x="8" y="45" width="21" height="145" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="30" y="23" width="21" height="167" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="52" y="28" width="28" height="162" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="81" y="33" width="18" height="157" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="100" y="36" width="12" height="154" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="113" y="49" width="26" height="141" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="140" y="19" width="14" height="171" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="155" y="18" width="12" height="172" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="168" y="28" width="25" height="162" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="194" y="48" width="18" height="142" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="213" y="39" width="23" height="151" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="237" y="27" width="18" height="163" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="256" y="14" width="23" height="176" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="280" y="14" width="22" height="176" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="303" y="39" width="27" height="151" fill="url(#bookF)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="331" y="13" width="27" height="177" fill="url(#bookD)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="359" y="39" width="17" height="151" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="377" y="17" width="22" height="173" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="400" y="45" width="15" height="145" fill="url(#bookA)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="416" y="48" width="25" height="142" fill="url(#bookE)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="442" y="14" width="20" height="176" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="463" y="44" width="22" height="146" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="486" y="16" width="21" height="174" fill="url(#bookC)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="508" y="15" width="26" height="175" fill="url(#bookB)" stroke="#3a2818" stroke-width="0.5" opacity="0.9"/>
+<rect x="0" y="195" width="520" height="8" fill="url(#wood)"/></g>
+<ellipse cx="800" cy="960" rx="180" ry="30" fill="#5D4037" opacity="0.3"/>
+<ellipse cx="800" cy="950" rx="180" ry="30" fill="url(#wood)" opacity="0.5"/>
+</svg>

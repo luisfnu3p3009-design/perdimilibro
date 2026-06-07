@@ -5,7 +5,7 @@
 //   - nunca cachear: /api/*, llamadas a Supabase, Google Books, Open Library
 // Bumpear VERSION en cada deploy para invalidar caches viejos.
 
-const VERSION = 'v0.4.0';
+const VERSION = 'v0.5.0-reskin';
 const CACHE = `perdimilibro-${VERSION}`;
 
 const PRECACHE = [
@@ -20,6 +20,7 @@ const PRECACHE = [
   '/migrate.js',
   '/config.js',
   '/manifest.json',
+  '/bg-biblioteca.svg',
   '/terminos.html',
   '/privacidad.html',
   '/login.html',
